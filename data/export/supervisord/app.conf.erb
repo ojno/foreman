@@ -5,12 +5,12 @@ engine.each_process do |name, process|
     port = engine.port_for(process, num)
     full_name = "#{app}-#{name}-#{num}"
     environment = engine.env.merge("PORT" => port.to_s).map do |key, value|
-      "#{key}=#{shell_quote(value)}"
+      "#{key}=\"#{value}\""
     end
     app_names << full_name
 %>
 [program:<%= full_name %>]
-command=<%= process.command %>
+command=<%= process.command.sub("%", "%%") %>
 autostart=true
 autorestart=true
 stopsignal=QUIT
